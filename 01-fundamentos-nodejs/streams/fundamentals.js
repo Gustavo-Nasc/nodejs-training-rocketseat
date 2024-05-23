@@ -15,7 +15,7 @@
 //   .pipe(process.stdout)
 
 // Para construir uma Stream no zero, podemos iniciar criando uma do tipo 'Readable'
-import { Readable } from 'node:stream'
+import { Readable, Writable, Transform } from 'node:stream'
 
 class OneToHundredStream extends Readable {
   // Toda Stream Readable tem uma função obrigatória, que é a '_read', que retorna
@@ -58,7 +58,46 @@ class OneToHundredStream extends Readable {
   }
 }
 
-// Ao criar uma nova classe dessa Stream e executá-la para exibir no terminal
-// A saída serão os números de 1 a 100
+// Agora vamos criar uma Stream de escrita, que irá receber dados de uma Stream
+// De leitura e irá multiplicar os números da Stream de Leitura por 10
+class MultplyByTenStream extends Writable {
+  // Assim como a Readable Stream, essa recebe um método obrigatório, que é o
+  // _write.
+  // Esse método recebe 3 parâmetros:
+  // chunk => o pedaço que lemos da Stream de leitura, o que está sendo enviado
+  // para o push de uma Stream de leitura
+  // encoding => a codificação que está sendo utilizada
+  // callback => a função que será executada quando o processo de escrita
+  // terminou o que era preciso ser feito com aquela informação
+  _write(chunk, encoding, callback) {
+    console.log(Number(chunk.toString()) * 10)
+    callback() // Encerra tudo que está sendo executado
+  }
+}
+
+// Agora vamos criar uma Stream de Transformação, que irá receber dados de uma Stream
+// E transformá-los em números negativos
+class InverseNumberStream extends Transform {
+  // Assim como a Writable Streams, essa recebe um método obrigatório,
+  // que é o transform
+  _transform(chunk, encoding, callback) {
+    const transformed = Number(chunk.toString()) * -1
+
+    // Aqui no callback enviaremos dois parâmetros:
+    // o erro, no caso, enviamos nulo pois não há erro
+    // e o segundo parâmetro, que é a transformação que está sendo realizada
+    callback(null, Buffer.from(String(transformed)))
+  }
+}
+
+// Ao criar uma nova classe dessa Stream de Escrita e inserir a mesma dentro do
+// pipe, note que todos os números serão multiplicados por 10 e já formatados
+// para exibição
+// new OneToHundredStream()
+//   .pipe(new MultplyByTenStream())
+
 new OneToHundredStream()
-  .pipe(process.stdout)
+  // Precisa obrigatoriamente da leitura dos dados e a escrita dos dados para
+  // outra Stream, servindo como uma intermediária entre a Leitura e Escrita
+  .pipe(new InverseNumberStream())
+  .pipe(new MultplyByTenStream()) // Só é feita a escrita dos números multiplicados por 10
