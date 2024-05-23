@@ -1,35 +1,18 @@
 import http from 'node:http'
+import { json } from './middlewares/json.js'
 
-// === HTTP Stauts Code
-// É um conceito universal para aplicações
-// É um código numérico de três dígitos que indica qual o código de retorno da
-// requisição que está sendo executada, para que o Frontend não somente pelo texto
-// qual o stauts daquela requisição (Se deu erro, se não foi encontrada,
-// se deu tudo certo etc.) e qual a especificação desse status
-// Tem muita importância semântica para o Frontend
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 const users = []
+
+// === MiddleWares
+// Um conceito bastante utilizado no Node
+// É um interceptador, uma função que irá pegar a nossa requisição
+// Eles sempre recebem o 'req' e 'res', podendo transformá-los, executá-los etc.
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req
 
-  // Copiando o código da última aula, nós podemos aplicar o conceito e obter o
-  // corpo da requisição que está sendo feita, transformando o Buffer em JSON
-  // Com isso, acessando os dados do objeto individualmente
-  /* */
-  const buffers = []
-  for await (const chunk of req) {
-    buffers.push(chunk)
-  }
-  // const body = JSON.parse(Buffer.concat(buffers).toString())
-  // Ao executar somente com a linha acima, será exibido um erro, pois o código
-  // é exutado até quando não há nenhuma informação no corpo da requisição...
-  // Para consertar, podemos utilizar um 'try/catch'
-  try {
-    req.body = JSON.parse(Buffer.concat(buffers).toString())
-  } catch {
-    req.body = null
-  }
+  // Criamos primeiro o Middlaware responsável pelo corpo da requisição
+  await json(req, res)
 
   // Com isso, podemos desestruturar o body e criar um usuário com os dados
   // inseridos no corpo de requisição
@@ -54,7 +37,6 @@ const server = http.createServer(async (req, res) => {
 
   if (method === 'GET' && url === '/usuarios') {
       return res
-        .setHeader('Content-Type', 'application/json')
         .end(JSON.stringify(users))
   }
 
