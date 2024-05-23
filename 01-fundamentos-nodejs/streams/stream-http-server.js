@@ -12,18 +12,31 @@ class InverseNumberStream extends Transform {
   }
 }
 
-const server = http.createServer((req, res) => {
-  // Como mencionado anteriormente, tudo no Node são Streams
-  // ou seja, o req e o res são Streams, como se fossem:
-  // req => semelhante a Readable Stream
-  // res => semelhante Writable Stream
-  return req
-    .pipe(new InverseNumberStream())
-    .pipe(res)
-  // Relacionando com o código criado anteriormente, temos:
-  // new OneToHundredStream()
+const server = http.createServer(async (req, res) => {
+  // Existem casos onde nós precisamos ler todos os dados da Stream antes de
+  // processá-los, ou seja, precisamos desses dados completos
+  // Para isso, utilzamos um Array de Buffers, percorremos esses Buffers, populando-
+  // -os e então, trabalhamos com um Array completo
+  const buffers = []
+
+  // O 'await', dentro de uma Stream, espera cada pedaço da Stream ser executado
+  // Para cada pedaço da requisição (const chunk of req), inserimos esse peraço
+  // no Array de Buffers
+  for await (const chunk of req) {
+    buffers.push(chunk)
+  }
+
+  // E então populamos todos esses dados num Buffer
+  const fullStreamContent = Buffer.concat(buffers).toString()
+
+  // E exibimos no console
+  console.log(fullStreamContent)
+
+  return res.end(fullStreamContent)
+
+  // return req
   //   .pipe(new InverseNumberStream())
-  //   .pipe(new MultplyByTenStream())
+  //   .pipe(res)
 })
 
 server.listen(3334)
