@@ -37,5 +37,14 @@ export const routes = [
         }))
       }
     }
+  },
+  // Para trabalharmos com a Route Param, criamos uma nova rota, que deleta um usuário
+  // específico
+  {
+    method: 'DELETE',
+    url: '/users/', // Porém, precisamos pegar o ID que irá vir na URL
+    handler: (req, res) => {
+      return res.end()
+    }
   }
 ]
