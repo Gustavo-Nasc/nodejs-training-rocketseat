@@ -13,19 +13,23 @@ export class Database {
   #database = {} // A '#' indica que esse é um campo privado da classe Database
 
   // Construtor que será executado assim que o Database ser carregado
+  constructor() {
+    fs.readFile(databasePath, 'utf-8', (err, data) => {
+      if(err) {
+        // Caso o arquivo não exista, ele é criado automaticamente
+        this.#persist()
+      } else {
+        // Caso o arquivo exista, ele é convertido para um JSON
+        this.#database = JSON.parse(data)
+      }
+    })
+  }
 
   #persist() {
     // Utilizamos o 'fs' para persistir os dados num arquivo localmente salvo
-    // E pedimos para o JSON transformar os dados numa estrutura JSON
-    fs
-      .writeFile(databasePath, JSON.stringify(this.#database))
-      .then(data => {
-        this.#database = JSON.parse(data)
-      })
-      .catch(() => {
-        // Caso o arquivo não exista, ele é criado automaticamente
-        this.#persist()
-      })
+    // E pedimos para o JSON transformar os dados numa string
+    // Quando executei apenas com o 'writeFileSync', no Node 20
+    fs.writeFileSync('db.json', JSON.stringify(this.#database))
   }
 
   // Função para busca dos dados, onde recebemos o nome da tabela
