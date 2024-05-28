@@ -1,6 +1,10 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js'
 import { Database } from './database.js'
+// Utilizaremos o UUID para gerar um ID único para para usuário criado
+// === UUID => Universally Unique IDentifier
+// É um ID único, ou seja, toda vez que um código for gerado, ele será único
+import { randomUUID } from 'node:crypto'
 
 // Com o banco de dados criado, podemos criar uma nova instância do mesmo
 const database = new Database()
@@ -15,7 +19,8 @@ const server = http.createServer(async (req, res) => {
       const { name, email } = req.body
 
       const user = {
-        id: 1,
+        // E no lugar do valor do 'id: 1', subistituímos por 'id: randomUUI()'
+        id: randomUUID(),
         name,
         email,
       }
