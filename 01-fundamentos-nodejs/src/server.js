@@ -43,9 +43,7 @@ const server = http.createServer(async (req, res) => {
     // E agora podemos pegar os parâmetros da rota também com o Regex
     const routeParams = req.url.match(route.url)
 
-    console.log(routeParams)
-    // Ao executar o 'console.log()', o retorno mostrará a url que foi enviada
-    // e o Refex sepa os parâmetros que foram enviados e os nomeia em grupos
+    req.params = { ...routeParams.groups }
 
     return route.handler(req, res)
   }
