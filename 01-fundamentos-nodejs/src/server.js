@@ -33,11 +33,20 @@ const server = http.createServer(async (req, res) => {
   // Como temos acesso ao method e url da requisição, podemos verificar se alguma
   // rota daquelas de foram criadas é igual a requisição
   const route = routes.find(route => {
-    return route.method === method && route.url === url
+    // Agora que temos a verificação com o Regex, podemos substituir a
+    // verificação pelo Regex
+    return route.method === method && route.url.test(url)
   })
 
   // Caso a rota exista, executaremos a função 'handler()' dessa rota
   if (route) {
+    // E agora podemos pegar os parâmetros da rota também com o Regex
+    const routeParams = req.url.match(route.url)
+
+    console.log(routeParams)
+    // Ao executar o 'console.log()', o retorno mostrará a url que foi enviada
+    // e o Refex sepa os parâmetros que foram enviados e os nomeia em grupos
+
     return route.handler(req, res)
   }
 
