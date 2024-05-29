@@ -53,5 +53,22 @@ export const routes = [
 
       return res.writeHead(204).end()
     }
+  },
+  {
+    method: 'PUT',
+    // Para identificarmos os parâmetros na rota, geralmente, na maioria das Techs,
+    // utilizamos o símbolo de ':', seguido do nome do parâmetro (users/:id)
+    url: buildRoutePath('/users/:id'),
+    handler: (req, res) => {
+      const { id } = req.params
+      const { name, email } = req.body
+
+      database.update('users', id, {
+        name,
+        email,
+      })
+
+      return res.writeHead(204).end()
+    }
   }
 ]
