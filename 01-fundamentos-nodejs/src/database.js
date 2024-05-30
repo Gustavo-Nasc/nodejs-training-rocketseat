@@ -33,9 +33,17 @@ export class Database {
   }
 
   // Função para busca dos dados, onde recebemos o nome da tabela
-  select(table) {
+  select(table, search) {
     // Criamos a informação a ser exibida passando a tabela como chave para ser buscada
-    const data = this.#database[table] ?? []
+    let data = this.#database[table] ?? []
+
+    if (search) {
+      data = data.filter(row => {
+        return Object.entries(search).some(([key, value]) => {
+          return row[key].toLowerCase().includes(value.toLowerCase())
+        })
+      })
+    }
 
     return data
   }

@@ -1,6 +1,7 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js'
 import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
 // Exitem três formas do Frontend enviar informações para a API
 // === Query Parameters
@@ -43,7 +44,10 @@ const server = http.createServer(async (req, res) => {
     // E agora podemos pegar os parâmetros da rota também com o Regex
     const routeParams = req.url.match(route.url)
 
-    req.params = { ...routeParams.groups }
+    const { query, ...params } = routeParams.groups
+
+    req.params = params
+    req.query = query ? extractQueryParams(query) : {}
 
     return route.handler(req, res)
   }
