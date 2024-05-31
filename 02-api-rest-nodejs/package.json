@@ -6,7 +6,9 @@
     "dev": "tsx watch src/server.ts",
     "lint": "eslint . --ext .ts --fix",
     "knex": "node --no-warnings --import tsx ./node_modules/knex/bin/cli.js",
-    "migrate": "npm run knex -- migrate:make"
+    "migrate:create": "npm run knex -- migrate:make",
+    "migrate:run": "npm run knex -- migrate:latest",
+    "migrate:rollback": "npm run knex -- migrate:rollback"
   },
   "keywords": [],
   "author": "",
