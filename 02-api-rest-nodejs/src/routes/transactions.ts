@@ -4,7 +4,11 @@ import { knex } from '../database'
 import { checkSectionIdExists } from '../middlewares/check-sectionId-exists'
 
 export async function transactionsRoutes(app: FastifyInstance) {
-  app.get('/', { preHandler: [checkSectionIdExists] }, async (req) => {
+  // O hook abaixo é global, porém, como estamos trabalhando no contexto
+  // desse plugin, ele só será aplicado globalmente nas rotas desse plugin
+  app.addHook('preHandler', checkSectionIdExists)
+
+  app.get('/', async (req) => {
     const { sectionId } = req.cookies
 
     const transactions = await knex('transactions')
@@ -14,7 +18,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transactions }
   })
 
-  app.get('/:id', { preHandler: [checkSectionIdExists] }, async (req) => {
+  app.get('/:id', async (req) => {
     const { sectionId } = req.cookies
 
     const getTransactionParamsSchema = z.object({
@@ -30,7 +34,7 @@ export async function transactionsRoutes(app: FastifyInstance) {
     return { transaction }
   })
 
-  app.get('/summary', { preHandler: [checkSectionIdExists] }, async (req) => {
+  app.get('/summary', async (req) => {
     const { sectionId } = req.cookies
 
     const summary = await knex('transactions')
