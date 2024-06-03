@@ -3,4 +3,6 @@ node_modules/
 
 # Local Files
 src/database/app.db
+src/database/test.db
 .env
+.env.test

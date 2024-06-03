@@ -1,16 +1,22 @@
-import { beforeAll, afterAll, describe, it, expect } from 'vitest'
+import { beforeAll, afterAll, describe, it, expect, beforeEach } from 'vitest'
 import request from 'supertest'
 import { app } from '../app'
+import { execSync } from 'child_process'
 
 // describe => Uma forma de categorização dos testes
 // Ao executar os testes que estão no 'describe', eles serão exibidos com a categoria
 describe('Transactions routes', () => {
   beforeAll(async () => {
-    app.ready()
+    await app.ready()
   })
 
   afterAll(async () => {
-    app.close()
+    await app.close()
+  })
+
+  beforeEach(async () => {
+    execSync('npm run migrate:rollback --all')
+    execSync('npm run migrate:run')
   })
 
   // it => tem a exata mesma função do 'test()', o que muda é a semântica
