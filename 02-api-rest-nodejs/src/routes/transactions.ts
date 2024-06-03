@@ -6,44 +6,64 @@ import { checkSectionIdExists } from '../middlewares/check-sectionId-exists'
 export async function transactionsRoutes(app: FastifyInstance) {
   // O hook abaixo é global, porém, como estamos trabalhando no contexto
   // desse plugin, ele só será aplicado globalmente nas rotas desse plugin
-  app.addHook('preHandler', checkSectionIdExists)
-
-  app.get('/', async (req) => {
-    const { sectionId } = req.cookies
-
-    const transactions = await knex('transactions')
-      .where('sectionId', sectionId)
-      .select()
-
-    return { transactions }
+  app.addHook('preHandler', async (req) => {
+    console.log(`[${req.method}] ${req.url}`)
   })
 
-  app.get('/:id', async (req) => {
-    const { sectionId } = req.cookies
+  app.get(
+    '/',
+    {
+      preHandler: [checkSectionIdExists],
+    },
+    async (req) => {
+      const { sectionId } = req.cookies
 
-    const getTransactionParamsSchema = z.object({
-      id: z.string().uuid(),
-    })
+      const transactions = await knex('transactions')
+        .where('sectionId', sectionId)
+        .select()
 
-    const { id } = getTransactionParamsSchema.parse(req.params)
+      return { transactions }
+    },
+  )
 
-    const transaction = await knex('transactions')
-      .where({ sectionId, id })
-      .first() // Indica que terá só um resultado
+  app.get(
+    '/:id',
+    {
+      preHandler: [checkSectionIdExists],
+    },
+    async (req) => {
+      const { sectionId } = req.cookies
 
-    return { transaction }
-  })
+      const getTransactionParamsSchema = z.object({
+        id: z.string().uuid(),
+      })
 
-  app.get('/summary', async (req) => {
-    const { sectionId } = req.cookies
+      const { id } = getTransactionParamsSchema.parse(req.params)
 
-    const summary = await knex('transactions')
-      .where({ sectionId })
-      .sum('amount', { as: 'amount' })
-      .first()
+      const transaction = await knex('transactions')
+        .where({ sectionId, id })
+        .first() // Indica que terá só um resultado
 
-    return { summary }
-  })
+      return { transaction }
+    },
+  )
+
+  app.get(
+    '/summary',
+    {
+      preHandler: [checkSectionIdExists],
+    },
+    async (req) => {
+      const { sectionId } = req.cookies
+
+      const summary = await knex('transactions')
+        .where({ sectionId })
+        .sum('amount', { as: 'amount' })
+        .first()
+
+      return { summary }
+    },
+  )
 
   app.post('/', async (req, reply) => {
     const createTransactionBodySchema = z.object({
