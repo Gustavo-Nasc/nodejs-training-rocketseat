@@ -15,7 +15,7 @@ describe('Transactions routes', () => {
 
   // it => tem a exata mesma função do 'test()', o que muda é a semântica
   // Deve('ser possível criar uma nova transação')
-  it('should be possible create a new transaction', async () => {
+  it('should be able create a new transaction', async () => {
     await request(app.server)
       .post('/transactions')
       .send({
