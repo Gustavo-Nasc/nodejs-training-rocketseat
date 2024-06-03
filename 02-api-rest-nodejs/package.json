@@ -8,7 +8,8 @@
     "knex": "node --no-warnings --import tsx ./node_modules/knex/bin/cli.js",
     "migrate:create": "npm run knex -- migrate:make",
     "migrate:run": "npm run knex -- migrate:latest",
-    "migrate:rollback": "npm run knex -- migrate:rollback"
+    "migrate:rollback": "npm run knex -- migrate:rollback",
+    "test": "npx vitest"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,8 @@
     "@types/node": "^20.12.13",
     "eslint": "^8.57.0",
     "tsx": "^4.11.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
