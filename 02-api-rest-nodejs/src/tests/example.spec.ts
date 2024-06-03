@@ -1,12 +1,28 @@
-import { expect, test } from 'vitest'
+import { test, beforeAll, afterAll } from 'vitest'
+import request from 'supertest'
+import { app } from '../app'
 
-// Enunciado: O usuário consegue criar uma nova transação
-test('O Usuário consegue criar uma nova transação', () => {
+// beforeAll => todo código que deve ser executado antes de todos os teste
+// beforeEach => todo códugo que deve ser executado antes de cada teste
+beforeAll(async () => {
+  app.ready()
+})
+
+// afterAll => todo código que deve ser executado depois de todos os testes
+// afterEach => todo códugo que deve ser executado depois de cada teste
+afterAll(async () => {
+  app.close()
+})
+
+test('User can create a new Transaction', async () => {
   // Operação:
   // Criar uma nova chamada HTTP para o servidor que cria a transação
-
-  // Validação do teste:
-  // A Resposta esperada do Backend deve ser com o stautus code 201
-  const responseStatusCode = 201
-  expect(responseStatusCode).toEqual(201)
+  await request(app.server)
+    .post('/transactions')
+    .send({
+      title: 'Teste',
+      amount: 100,
+      type: 'credit',
+    })
+    .expect(201) // Espera-se que a resposta seja 201
 })
