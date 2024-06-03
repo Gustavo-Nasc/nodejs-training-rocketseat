@@ -1,6 +1,6 @@
 import { beforeAll, afterAll, describe, it, expect, beforeEach } from 'vitest'
 import request from 'supertest'
-import { app } from '../app'
+import { app } from '../src/app'
 import { execSync } from 'child_process'
 
 // describe => Uma forma de categorização dos testes
