@@ -1,28 +1,40 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { knex } from '../database'
+import { checkSectionIdExists } from '../middlewares/check-sectionId-exists'
 
 export async function transactionsRoutes(app: FastifyInstance) {
-  app.get('/', async () => {
-    const transactions = await knex('transactions').select()
+  app.get('/', { preHandler: [checkSectionIdExists] }, async (req) => {
+    const { sectionId } = req.cookies
+
+    const transactions = await knex('transactions')
+      .where('sectionId', sectionId)
+      .select()
 
     return { transactions }
   })
 
-  app.get('/:id', async (req) => {
+  app.get('/:id', { preHandler: [checkSectionIdExists] }, async (req) => {
+    const { sectionId } = req.cookies
+
     const getTransactionParamsSchema = z.object({
       id: z.string().uuid(),
     })
 
     const { id } = getTransactionParamsSchema.parse(req.params)
 
-    const transaction = await knex('transactions').where('id', id).first() // Indica que terá só um resultado
+    const transaction = await knex('transactions')
+      .where({ sectionId, id })
+      .first() // Indica que terá só um resultado
 
     return { transaction }
   })
 
-  app.get('/summary', async () => {
+  app.get('/summary', { preHandler: [checkSectionIdExists] }, async (req) => {
+    const { sectionId } = req.cookies
+
     const summary = await knex('transactions')
+      .where({ sectionId })
       .sum('amount', { as: 'amount' })
       .first()
 
