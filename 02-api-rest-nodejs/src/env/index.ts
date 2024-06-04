@@ -9,12 +9,14 @@ if (process.env.NODE_ENV === 'test') {
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
+  DATABASE_CLIENT: z.enum(['sqlite', 'pg']),
   DATABASE_URL: z.string(),
-  PORT: z.number().default(3333),
+  PORT: z.coerce.number().default(3333),
+  // o coerce serve para transformar qualquer valor para um tipo que especificar
+  // no caso, para um Number
 })
 
 const _env = envSchema.safeParse(process.env)
-// Vamos pegar o 'process.env' e transformá-lo num objeto para que possamos utilizá-lo
 
 if (_env.success === false) {
   console.error('Invalid environment variables!', _env.error.format())
