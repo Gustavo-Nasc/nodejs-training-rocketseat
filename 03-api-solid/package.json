@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
-    "lint": "eslint . --ext .ts,.js --ignore-pattern node_modules/ --fix",
+    "lint": "eslint . --ext .ts,.js  --fix",
     "build": "tsup src --out-dir build"
   },
   "keywords": [],
