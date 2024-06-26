@@ -13,7 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^4.28.0"
+    "dotenv": "16.4.5",
+    "fastify": "^4.28.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.2.2",
