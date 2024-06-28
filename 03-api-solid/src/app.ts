@@ -1,31 +1,25 @@
 import fastify from 'fastify'
+import { z } from 'zod'
+import { prisma } from './lib/prisma'
 
 export const app = fastify()
 
-// Criando um Database com Docker e PostreSQL
+app.post('/users', async (request, reply) => {
+  const registerBodySchema = z.object({
+    name: z.string(),
+    email: z.string().email(),
+    password: z.string().min(6),
+  })
 
-// === COMANDO PADRÃO PARA CRIAÇÃO DE CONTAINER DOCKER COM POSTGRESQL
+  const { name, email, password } = registerBodySchema.parse(request.body)
 
-// docker run --name api-solid-pg bitnami/postgresql
-// Após --name passa-se o nome que queremos dar a esse container. E, em seguida,
-// qual a imagem que queremos usar para a criação desse container
+  await prisma.user.create({
+    data: {
+      name,
+      email,
+      password_hash: password,
+    },
+  })
 
-// =============================================================================
-// === PRINCIPAIS POSSÍVEIS VARIÁVEIS
-
-// -e POSTGREQL_USERAME=
-// default: postgres
-// O Username que poderá acessar o Container
-
-// -e POSTGREQL_PASSWORD=
-// default: nil
-// A senha para acessar o Container
-
-// -e POSTGRESQL_DATABASE=
-// default: postgres
-// O nome do Database que queremos criar
-
-// -p 5432:5432
-// Indica que queremos direcionar a porta do Container (5432) para a porta do Host
-// que deseja entrar no Container, ou seja, quando formos acessar o Container,
-// podemos ir pelo localhost:5432
+  return reply.status(201).send()
+})
