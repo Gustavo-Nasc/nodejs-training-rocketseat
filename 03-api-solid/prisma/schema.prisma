@@ -23,6 +23,7 @@ model CheckIn {
   id           String    @id @default(uuid())
   created_at   DateTime  @default(now())
   validated_at DateTime?
+  user_id      String
 
   @@map("check_ins")
 }
