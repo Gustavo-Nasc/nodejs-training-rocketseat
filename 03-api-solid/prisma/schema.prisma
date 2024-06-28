@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  email         String   @unique
+  email         String    @unique
   password_hash String
   // Hashing -> Diferente da Criptografia, só é possível Criptografar, não sendo
   // possível descriptografar
-  created_at    DateTime @default(now())
+  created_at    DateTime  @default(now())
+  checkIns      CheckIn[] // Campos não primitivos como esse não serão exibidos
+  // no Banco de Dados, eles servem para que o Prisma entenda a tipagem do relacionamento
+  // esse será o campo que acessamos pelo JavaScript
 
   @@map("users")
 }
@@ -23,18 +26,24 @@ model CheckIn {
   id           String    @id @default(uuid())
   created_at   DateTime  @default(now())
   validated_at DateTime?
-  user_id      String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  gym    Gym    @relation(fields: [gym_id], references: [id])
+  gym_id String
 
   @@map("check_ins")
 }
 
 model Gym {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String?
   phone       String?
   latitude    Decimal
   longitude   Decimal
+  check_ins   CheckIn[]
 
   @@map("gyms")
 }
