@@ -9,7 +9,9 @@
     "lint": "eslint . --ext .ts,.js  --fix",
     "build": "tsup src --out-dir build",
     "prisma:dev": "npx prisma migrate dev",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,8 @@
     "prisma": "5.16.1",
     "tsup": "^8.1.0",
     "tsx": "^4.15.7",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "1.6.0"
   }
 }
