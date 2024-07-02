@@ -13,11 +13,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   const { name, email, password } = registerBodySchema.parse(request.body)
 
-  // Note que, agora, com o princípio da Inversão de Dependência, o arquivo que
-  // precisar do Caso de Uso é o que vai enviar as dependências por parâmetro
   try {
     const usersRepository = new PrismaUsersRepository()
-
     const registerUseCase = new RegisterUseCase(usersRepository)
 
     await registerUseCase.execute({ name, email, password })
