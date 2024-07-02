@@ -1,6 +1,10 @@
 import { prisma } from '@/lib/prisma'
-import { PrismaUsersRepository } from '@/repositories/prisma-users-repository'
 import { hash } from 'bcryptjs'
+
+// === USE CASE
+// Criamos esse arquivo separado, livre de frameworks, para que, caso futuramente
+// a aplicação não utilize mais Requisições HTTP, possamos reaproveitar o código
+// responsável pela criação do usuário
 
 interface RegisterUseCaseRequest {
   name: string
@@ -8,24 +12,38 @@ interface RegisterUseCaseRequest {
   password: string
 }
 
-export async function registerUseCase({
-  name,
-  email,
-  password,
-}: RegisterUseCaseRequest) {
-  const password_hash = await hash(password, 6)
+// === SOLID
+// Iniciando de trás pra frente 😅, vamos ver primeiro sobre o 'D'
+// D => Dependency Inversion Principle
 
-  const userWithSameEmail = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  })
+// Note que esse use-case tem uma dependência, no caso, o Repository do Prisma que
+// criamos. Sem a dependência, esse caso de uso deixa de funcionar
+// No princípio D, mudamos em como o use-case tem acesso a dependência
+// Nesse primeiro momento, note que estamos instanciando diretamente nossa
+// dependência
 
-  if (userWithSameEmail) {
-    throw new Error('Email already exists')
+// Para aplicarmos o conceito, criamos uma classe e inserimos a função responsável
+// pela execução dentro dessa classe
+export class RegisterUseCase {
+  constructor(private usersRepository: any) {}
+
+  async execute({ name, email, password }: RegisterUseCaseRequest) {
+    const password_hash = await hash(password, 6)
+
+    const userWithSameEmail = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    })
+
+    if (userWithSameEmail) {
+      throw new Error('Email already exists')
+    }
+
+    // const prismaUsersRepository = new PrismaUsersRepository()
+
+    // Note que agora, o código responsável pela criação do usuário não está
+    // associado ao Prisma
+    await this.usersRepository.create({ name, email, password_hash })
   }
-
-  const prismaUsersRepository = new PrismaUsersRepository()
-
-  await prismaUsersRepository.create({ name, email, password_hash })
 }
