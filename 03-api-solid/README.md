@@ -9,7 +9,7 @@ São as funcionalidades da aplicação, o que o usuário poderá fazer na aplica
 - [x] Deve ser possível se autenticar
 - [x] Deve ser possível obter o perfil de um usuário logado
 - [ ] Deve ser possível obter o número de check-ins realizados pelo usuário logado
-- [ ] Deve ser possível o usuário obter seu histórico de check-ins
+- [x] Deve ser possível o usuário obter seu histórico de check-ins
 - [ ] Deve ser possível o usuário buscar academias próximas
 - [ ] Deve ser possível o usuário buscar academias pelo nome
 - [x] Deve ser possível o usuário realizar check-in em uma academia
@@ -21,7 +21,7 @@ São os caminhos que cada requisito pode tomar, sempre estará associado a um re
 
 - [x] O usuário não deve poder se cadastrar com um e-mail duplicado
 - [x] O usuário não pode fazer 2 check-ins no mesmo dia
-- [ ] O usuário não pode fazer check-in se não estiver perto (100m) da academia
+- [x] O usuário não pode fazer check-in se não estiver perto (100m) da academia
 - [ ] O check-in só pode ser validado até 20 minutos após criado
 - [ ] O check-in só pode ser validado por administradores
 - [ ] A academia só pode ser cadastrada por administradores
@@ -31,5 +31,5 @@ São os requisitos que não partem do cliente, são muito mais técnicos em nív
 
 - [x] A senha do usuário precisa estar criptografada
 - [x] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL
-- [ ] Todas as listas de dados precisam esstar paginadas com 20 itens por página
+- [x] Todas as listas de dados precisam estar paginadas com 20 itens por página
 - [ ] O usuário deve ser identificado por JWT (JSON Web Token)
