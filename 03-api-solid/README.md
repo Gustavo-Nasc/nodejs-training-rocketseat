@@ -20,7 +20,7 @@ São as funcionalidades da aplicação, o que o usuário poderá fazer na aplica
 São os caminhos que cada requisito pode tomar, sempre estará associado a um requisito funcional
 
 - [x] O usuário não deve poder se cadastrar com um e-mail duplicado
-- [ ] O usuário não pode fazer 2 check-ins no mesmo dia
+- [x] O usuário não pode fazer 2 check-ins no mesmo dia
 - [ ] O usuário não pode fazer check-in se não estiver perto (100m) da academia
 - [ ] O check-in só pode ser validado até 20 minutos após criado
 - [ ] O check-in só pode ser validado por administradores
