@@ -1,8 +1,7 @@
 import { z } from 'zod'
-import { RegisterUseCase } from '@/use-cases/register'
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { UserAlradyExistsError } from '@/use-cases/errors/user-already-exists-error'
+import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
@@ -14,8 +13,19 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const { name, email, password } = registerBodySchema.parse(request.body)
 
   try {
-    const usersRepository = new PrismaUsersRepository()
-    const registerUseCase = new RegisterUseCase(usersRepository)
+    // Nesse primeiro momento, nossos casos de uso estão utilizando apenas uma
+    // Dependência. Mas, futuramente, um caso de uso nosso pode usar muito mais
+    // do que somente uma dependência. Por isso, iremos aplicar, a partir de agora
+    // o === FACTORY PATTERN
+    // É como uma fábrica de coisas comuns, ou seja, todo um mesmo código que será
+    // utilizado diversas vezes na aplicação e esse código possui diversas dependências,
+    // nós podemos utilizar esse Pattern
+    // const usersRepository = new PrismaUsersRepository()
+    // const registerUseCase = new RegisterUseCase(usersRepository)
+
+    // Note que agora, sempre que eu precisar do registerUseCase, eu posso
+    // importá-lo diretamente pela nossa Factory
+    const registerUseCase = makeRegisterUseCase()
 
     await registerUseCase.execute({ name, email, password })
   } catch (err) {
