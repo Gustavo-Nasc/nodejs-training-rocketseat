@@ -8,13 +8,13 @@ São as funcionalidades da aplicação, o que o usuário poderá fazer na aplica
 - [x] Deve ser possível se cadastrar
 - [x] Deve ser possível se autenticar
 - [x] Deve ser possível obter o perfil de um usuário logado
-- [ ] Deve ser possível obter o número de check-ins realizados pelo usuário logado
+- [x] Deve ser possível obter o número de check-ins realizados pelo usuário logado
 - [x] Deve ser possível o usuário obter seu histórico de check-ins
 - [ ] Deve ser possível o usuário buscar academias próximas
 - [ ] Deve ser possível o usuário buscar academias pelo nome
 - [x] Deve ser possível o usuário realizar check-in em uma academia
 - [ ] Deve ser possível o validar o check-in de um usuário
-- [ ] Deve ser possível cadastrar uma academia
+- [x] Deve ser possível cadastrar uma academia
 
 ## Regras de Negócio
 São os caminhos que cada requisito pode tomar, sempre estará associado a um requisito funcional
