@@ -4,6 +4,16 @@ import { UsersRepository } from '../users-repository'
 // Ao invés de passarmos um Repository, como o Prisma, criamos um Repository
 // fictício para simular um e que possamos utilizá-lo para o teste unitário
 export class InMemoryUsersRepository implements UsersRepository {
+  async findById(id: string) {
+    const user = this.items.find((item) => item.id === id)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
+
   public items: User[] = []
 
   async findByEmail(email: string) {
