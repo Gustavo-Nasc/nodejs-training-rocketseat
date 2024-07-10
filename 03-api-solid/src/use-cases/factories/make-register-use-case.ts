@@ -9,7 +9,7 @@ import { RegisterUseCase } from '../register'
 // que já será aplicado aos arquivos que utiliza desse use-case
 export function makeRegisterUseCase() {
   const usersRepository = new PrismaUsersRepository()
-  const registerUseCase = new RegisterUseCase(usersRepository)
+  const useCase = new RegisterUseCase(usersRepository)
 
-  return registerUseCase
+  return useCase
 }
