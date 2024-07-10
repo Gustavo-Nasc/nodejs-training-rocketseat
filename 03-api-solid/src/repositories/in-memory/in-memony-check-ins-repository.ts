@@ -22,25 +22,25 @@ export class InMemoryCheckInsRepository implements CheckInsRepository {
 
   async findManyByUserId(userId: string, page: number) {
     return this.items
-      .filter((checkIn) => checkIn.user_id === userId)
+      .filter((item) => item.user_id === userId)
       .slice((page - 1) * 20, page * 20)
   }
 
   async countByUserId(userId: string) {
-    return this.items.filter((checkIn) => checkIn.user_id === userId).length
+    return this.items.filter((item) => item.user_id === userId).length
   }
 
   async findByUserIdOnDate(userId: string, date: Date) {
     const startOfTheDay = dayjs(date).startOf('date')
     const endOfTheDay = dayjs(date).endOf('date')
 
-    const checkInOnSameDate = this.items.find((checkIn) => {
-      const checkInDate = dayjs(checkIn.created_at)
+    const checkInOnSameDate = this.items.find((item) => {
+      const checkInDate = dayjs(item.created_at)
 
       const isOnSameDate =
         checkInDate.isAfter(startOfTheDay) && checkInDate.isBefore(endOfTheDay)
 
-      return checkIn.user_id === userId && isOnSameDate
+      return item.user_id === userId && isOnSameDate
     })
 
     if (!checkInOnSameDate) {

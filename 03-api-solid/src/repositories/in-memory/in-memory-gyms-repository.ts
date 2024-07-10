@@ -1,6 +1,7 @@
 import { Gym, Prisma } from '@prisma/client'
-import { GymsRepository } from '../gyms-repository'
+import { FindManyNearByParams, GymsRepository } from '../gyms-repository'
 import { randomUUID } from 'crypto'
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordenates'
 
 // Ao invés de passarmos um Repository, como o Prisma, criamos um Repository
 // fictício para simular um e que possamos utilizá-lo para o teste unitário
@@ -17,9 +18,28 @@ export class InMemoryGymsRepository implements GymsRepository {
     return gym
   }
 
+  async findManyNearby(params: FindManyNearByParams) {
+    return this.items.filter((gym) => {
+      const distance = getDistanceBetweenCoordinates(
+        {
+          latitude: params.latitude,
+          longitude: params.longitude,
+        },
+        {
+          latitude: gym.latitude.toNumber(),
+          longitude: gym.longitude.toNumber(),
+        },
+      )
+
+      console.log(distance)
+
+      return distance < 10000 // 10000m = 10km
+    })
+  }
+
   async searchMany(query: string, page: number) {
     return this.items
-      .filter((gym) => gym.title.toLowerCase().includes(query.toLowerCase()))
+      .filter((item) => item.title.toLowerCase().includes(query.toLowerCase()))
       .slice((page - 1) * 20, page * 20)
   }
 
