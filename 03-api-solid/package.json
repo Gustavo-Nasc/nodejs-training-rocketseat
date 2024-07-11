@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .ts,.js  --fix",
     "build": "tsup src --out-dir build",
     "prisma:dev": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
     "prisma:studio": "npx prisma studio",
     "test": "vitest run --dir src/use-cases",
     "test:watch": "vitest --dir src/use-cases",
