@@ -31,8 +31,6 @@ export class InMemoryGymsRepository implements GymsRepository {
         },
       )
 
-      console.log(distance)
-
       return distance < 10000 // 10000m = 10km
     })
   }
