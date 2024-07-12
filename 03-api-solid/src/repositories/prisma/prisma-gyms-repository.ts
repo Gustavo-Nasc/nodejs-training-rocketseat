@@ -14,15 +14,15 @@ export class PrismaGymsRepository implements GymsRepository {
   }
 
   async create(data: Prisma.GymCreateInput) {
-    const checkIn = await prisma.gym.create({
+    const gym = await prisma.gym.create({
       data,
     })
 
-    return checkIn
+    return gym
   }
 
   async searchMany(query: string, page: number) {
-    const checkIns = await prisma.gym.findMany({
+    const gyms = await prisma.gym.findMany({
       where: {
         title: {
           contains: query,
@@ -32,7 +32,7 @@ export class PrismaGymsRepository implements GymsRepository {
       skip: (page - 1) * 20,
     })
 
-    return checkIns
+    return gyms
   }
 
   async findManyNearby({ latitude, longitude }: FindManyNearByParams) {
