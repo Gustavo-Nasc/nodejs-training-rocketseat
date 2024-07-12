@@ -17,6 +17,7 @@
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "test:e2e": "vitest run --dir src/http",
+    "test:e2e:watch": "vitest --dir src/http",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
@@ -25,7 +26,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/jwt": "8.0.1",
-    "@prisma/client": "5.16.1",
+    "@prisma/client": "5.16.2",
     "@types/supertest": "6.0.2",
     "bcryptjs": "2.4.3",
     "dayjs": "1.11.11",
