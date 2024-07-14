@@ -1,0 +1,23 @@
+# Nome do Workflow
+name: Run Unit Tests
+
+# Quando ele será executado. No caso, sempre que houver um push, esse Workflow
+# será executado
+on: [push]
+
+# Os trabalhos que serão executados, podendo ser um ou mais
+jobs:
+  run-unit-tests: # Esse é um "trabalho", uma tarefa que será executada
+    name: Run Unit Tests # Nome desse trabalho (pode ser o mesmo do Workflow)
+    runs-on: ubuntu-latest # Iremos rodar esse trabalho numa máquina Ubuntu usando a última versão
+    steps: #Os passo que serão executados
+      - uses: actions/checkout@v3 # Baixa o código dentro da máquina
+      
+      - uses: actions/setup-node@v3 # Instala o Node.js
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - run: npm ci # Irá instalar as dependêcias do projeto sem pedir verificações ou alterar o package-lock
+
+      - run: npm run test # Esse é o Script que está no package desse projeto, que executa os testes unitários
