@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          working-directory: 03-api-solid
       
       - run: npm ci # Irá instalar as dependêcias do projeto sem pedir verificações ou alterar o package-lock
         working-directory: 03-api-solid
