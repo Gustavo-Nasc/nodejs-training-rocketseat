@@ -11,15 +11,15 @@ jobs:
     name: Run Unit Tests # Nome desse trabalho (pode ser o mesmo do Workflow)
     runs-on: ubuntu-latest # Iremos rodar esse trabalho numa máquina Ubuntu usando a última versão
     steps: #Os passo que serão executados
-      - uses: actions/checkout@v3 # Baixa o código dentro da máquina
+      - uses: actions/checkout@v3 # Baixa o repositório dentro da máquina
 
-      - run: cd 03-api-solid/ # Abre a pasta do Projeto 03 - API Solid
-      
       - uses: actions/setup-node@v3 # Instala o Node.js
         with:
           node-version: 20
           cache: 'npm'
       
       - run: npm ci # Irá instalar as dependêcias do projeto sem pedir verificações ou alterar o package-lock
+        working-directory: 03-api-solid
 
       - run: npm run test # Esse é o Script que está no package desse projeto, que executa os testes unitários
+        working-directory: 03-api-solid
