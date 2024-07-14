@@ -18,6 +18,8 @@ jobs:
           node-version: 20
           cache: 'npm'
       
+      - run: cd 03-api-solid/
+      
       - run: npm ci # Irá instalar as dependêcias do projeto sem pedir verificações ou alterar o package-lock
 
       - run: npm run test # Esse é o Script que está no package desse projeto, que executa os testes unitários
